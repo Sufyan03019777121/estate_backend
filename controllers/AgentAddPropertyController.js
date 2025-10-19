@@ -1,4 +1,4 @@
-const propertyService = require("../services/AgentAddpropertyService");
+const propertyService = require("../services/AgentAddPropertyService");
 
 // POST create property
 const AgentAddcreateProperty = async (req, res) => {
