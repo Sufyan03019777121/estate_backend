@@ -105,7 +105,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// ✅ Delete property
+// ✅ Delete property hhh
+
 router.delete("/:id", async (req, res) => {
   try {
     const property = await AgentProperty.findByIdAndDelete(req.params.id);
