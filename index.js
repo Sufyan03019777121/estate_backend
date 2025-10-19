@@ -16,7 +16,7 @@ app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ✅ Routes
-const agentPropertyRoutes = require("./routes/AgentAddpropertyRoutes.js");
+const agentPropertyRoutes = require("./routes/AgentAddPropertyRoutes");
 app.use("/api/agent-properties", agentPropertyRoutes);
 
 // ✅ MongoDB Connection
