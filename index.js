@@ -1,32 +1,51 @@
-// backend/index.js
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 
-// Load environment variables
 dotenv.config();
-
 const app = express();
 
-// ✅ Middleware
+// =========================
+// 🧩 Middleware
+// =========================
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// ✅ Routes
+// =========================
+// 📦 Routes
+// =========================
 const agentPropertyRoutes = require("./routes/AgentAddPropertyRoutes");
 app.use("/api/agent-properties", agentPropertyRoutes);
 
-// ✅ MongoDB Connection
-mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/listingsDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("✅ MongoDB connected"))
-.catch((err) => console.error("❌ MongoDB connection error:", err));
+const agentRoutes = require("./routes/UserAgentRoutes");
+app.use("/api/user-agents", agentRoutes);
 
-// ✅ Start Server
+const authRoutes = require("./routes/AuthRoutes");
+app.use("/api/auth", authRoutes);
+
+// =========================
+// 🧠 MongoDB Connection
+// =========================
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/listingsDB";
+
+mongoose
+  .connect(MONGO_URI) // ⚡ Deprecated options removed
+  .then(() => console.log("✅ MongoDB Connected Successfully"))
+  .catch((err) => console.error("❌ MongoDB Connection Error:", err.message));
+
+// =========================
+// ⚠️ Global Error Handler
+// =========================
+app.use((err, req, res, next) => {
+  console.error("💥 Server Error:", err.message);
+  res.status(500).json({ success: false, message: "Internal Server Error" });
+});
+
+// =========================
+// 🚀 Start Server
+// =========================
+app.listen(PORT, () => console.log(`🌐 Server running at: http://localhost:${PORT}`));
